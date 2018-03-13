@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "../mybatis-3-mapper.dtd" >
+<mapper namespace="com.dangdang.dao.GoodsDAO">
+
+	<resultMap type="Goods" id="GoodsResultMap">
+		<id property="GID" column="D_GID" />
+		<result property="picaddress" column="D_PICADDRESS" />
+		<result property="name" column="D_NAME" />
+		<result property="author" column="D_AUTHOR" />
+		<result property="publisher" column="D_PUBLISHER" />
+		<result property="describe" column="D_DESCRIBE" />
+		<result property="originalPrice" column="D_ORIGINALPRICE" />
+		<result property="dangdangPrice" column="D_DANGDANGPRICE" />
+		<result property="publishingTime" column="D_PUBLISHINGTIME" />
+		<result property="revision" column="D_REVISION" />
+		<result property="printingTime" column="D_PRINTINGTIME" />
+		<result property="impression" column="D_IMPRESSION" />
+		<result property="iisbn" column="D_IISBN" />
+		<result property="wordsNumber" column="D_WORDSNUMBER" />
+		<result property="pagesNumber" column="D_PAGESNUMBER" />
+		<result property="format" column="D_FORMAT" />
+		<result property="paper" column="D_PAPER" />
+		<result property="packaging" column="D_PACKAGING" />
+		<result property="editorRecommende" column="D_EDITORRECOMMENDE" />
+		<result property="briefContent" column="D_BRIEFCONTENT" />
+		<result property="briefAuthor" column="D_BRIEFAUTHOR" />
+		<result property="catalog" column="D_CATALOG" />
+		<result property="mediaReviews" column="D_MEDIAREVIEWS" />
+		<result property="illustration" column="D_ILLUSTRATION" />
+		<result property="sheleTime" column="D_SHELETIME" />
+		<result property="bookState" column="D_BOOKSTATE" />
+		<result property="stock" column="D_STOCK" />
+		<result property="sales" column="D_SALES" />
+		<result property="score" column="D_SCORE" />
+		<result property="recommendedLevel" column="D_RECOMMENDEDLEVEL" />
+		<result property="d_cateid" column="D_CATEID" />
+		
+<!-- 
+		<association property="category" javaType="Category">
+			<id property="d_cateid" column="D_CATEID" />
+			<result property="name" column="D_CNAME" />
+			<result property="parentid" column="D_PARENTID" />
+			<result property="amount" column="D_GOODSQUANTITY" />
+		</association> 
+-->
+	</resultMap>
+	
+	<!-- 设置启用缓存 -->
+	<cache></cache>
+	
+	<!--  查询所有商品 -->
+	<select id="selectAllGoodss" resultMap="GoodsResultMap">
+		select * from D_GOODS
+	</select>
+	
+	<!-- 通过id查询商品 -->
+	<select id="queryProductById" resultMap="GoodsResultMap">
+		select * from D_GOODS where 
+		<if test="_parameter != null">
+			D_GID=#{Goodsid}
+		</if>
+	</select>
+	
+	<!-- 编辑推荐 -->
+	<select id="queryEditorAdvisor" resultMap="GoodsResultMap">
+	<![CDATA[
+		select * from D_GOODS WHERE ROWNUM <= 2  ORDER BY D_RECOMMENDEDLEVEL desc 
+	]]>
+	</select>
+	
+	<!-- 热销图书 -->
+	<select id="queryHotProducts" resultMap="GoodsResultMap">
+	<![CDATA[
+		select * from D_GOODS WHERE ROWNUM <= 8 ORDER BY D_SALES desc
+	]]>
+	</select>
+	
+	<!-- 新书热卖 -->
+	<select id="queryNewHotProduct" resultMap="GoodsResultMap">
+	<![CDATA[
+		select * from D_GOODS WHERE ROWNUM <= 10 ORDER BY D_SALES desc,D_SHELETIME desc 
+	]]>
+	</select>
+	
+	<!-- 最新上架 -->
+	<select id="queryNewProducts" resultMap="GoodsResultMap">
+	<![CDATA[
+		select * from D_GOODS WHERE ROWNUM <= 8 ORDER BY D_SHELETIME desc 
+	]]>
+	</select>
+	
+	<!-- 查某类商品 -->
+	<!-- 查商品分页 -->
+	<sql id="queryAllProductByCatgroy">
+		SELECT g.*, ROWNUM r 
+			FROM D_GOODS g 
+			JOIN D_GOODCATEGORY gc 
+			ON g.D_CATEID = gc.D_CATEID
+			<trim prefix="where" prefixOverrides="and|or">
+				<if test="d_cateid != null">
+					g.D_CATEID=#{d_cateid}
+				</if>
+				<if test="parentid != null">
+					and gc.D_PARENTID=#{parentid}
+				</if>
+			</trim>
+	</sql>
+	<select id="queryProductByCatgroy" resultMap="GoodsResultMap">
+		SELECT * FROM 
+		(<include refid="queryAllProductByCatgroy"/>)	
+		<where>
+			<if test="start != null">
+				<![CDATA[  r >= #{start}  ]]> 
+			</if>
+			<if test="end != null">
+				<![CDATA[  and r <= #{end}  ]]>
+			</if>
+		</where>
+	</select>
+	
+	<!-- 查总数  -->	
+	<select id="queryCountByCatgroy" resultType="integer">
+		SELECT COUNT (*) FROM D_GOODS g JOIN D_GOODCATEGORY gc ON g.D_CATEID = gc.D_CATEID
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="d_cateid != null">
+				g.D_CATEID=#{d_cateid}
+			</if>
+			<if test="parentid != null">
+				and gc.D_PARENTID=#{parentid}
+			</if>
+		</trim>
+	</select>
+</mapper>

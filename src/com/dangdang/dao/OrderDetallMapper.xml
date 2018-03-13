@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "../mybatis-3-mapper.dtd" >
+<mapper namespace="com.dangdang.dao.OrderDetallDAO">
+	<!-- 插入订单项表 -->
+	<insert id="save">
+		<!-- 序列控制主键唯一 -->
+		<selectKey keyProperty="id" resultType="int" order="BEFORE">
+			select S_d_buyorderdetall.nextval from dual
+		</selectKey>
+		insert into D_BUYORDERDETAIL(d_id,d_number,d_total,d_orderid,d_gid) 
+			values(#{id},#{number},#{total},#{orderid},#{gid})
+	</insert>
+</mapper>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "../mybatis-3-mapper.dtd" >
+<mapper namespace="com.dangdang.dao.UserDAO">
+	<!-- 登陆 -->
+	<select id="queryUserEmailAndPassword" resultType="User" >
+		select d_uid as id, d_email  as email, d_password as password, d_nickname as nickname from d_user where d_email=#{email} and d_password=#{password}
+	</select>
+	<!-- 注册 -->
+	<insert id="save">
+		<!-- 序列控制主键唯一 -->
+		<selectKey keyProperty="id" resultType="int" order="BEFORE">
+			select S_d_user.nextval from dual
+		</selectKey>
+		insert into d_user (D_UID,D_EMAIL,D_PASSWORD,D_NICKNAME,D_ACCOUNTSTATE)values(#{id},#{email},#{password},#{nickname},#{accountstate})
+	</insert>
+	<!-- 根据id查用户 -->
+	<select id="queryUserById" resultType="User">
+		select d_uid as id, d_email  as email, d_password as password, d_nickname as nickname from d_user where d_uid=#{id}
+	</select>
+	<!-- 更新用户状态 -->
+	<update id="update">
+		update d_user set D_ACCOUNTSTATE=#{accountstate} where D_UID=#{id}
+	</update>
+</mapper>

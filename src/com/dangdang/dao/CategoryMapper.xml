@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "../mybatis-3-mapper.dtd" >
+<mapper namespace="com.dangdang.dao.CategoryDAO">
+
+	<resultMap type="Category" id="CategoryResultMap">
+		<id property="id" column="D_CATEID" />
+		<result property="name" column="D_CNAME" />
+		<result property="parentid" column="D_PARENTID" />
+		<result property="amount" column="D_GOODSQUANTITY" />
+		<collection property="secondCategory" ofType="Category" select="BaseQuerySecondCategoryByParentId" column="D_CATEID"/>
+	</resultMap>
+	
+	<!-- 查询二级类别secondCategory根据d_cateid -->
+	<select id="BaseQuerySecondCategoryByParentId" resultMap="CategoryResultMap">
+		SELECT * FROM d_goodcategory WHERE d_parentid=#{parentid}
+	</select>
+	
+	<!-- 查询所有类别（首页展示） -->
+	<select id="queryAllFirstCategory" resultMap="CategoryResultMap">
+		<![CDATA[  SELECT * FROM d_goodcategory WHERE d_cateid<=7  ]]>
+	</select>
+	<!-- 查询一级级类别  根据parentid -->
+	<select id="queryFirstCategroyByParentId" resultMap="CategoryResultMap">
+		SELECT * FROM d_goodcategory where
+			<if test="_parameter != null"> 
+				d_cateid=#{parentid}
+			</if>
+	</select>
+	
+	<!-- 根据id查询类别 -->
+<!-- 
+	<select id="queryCategroyByCateId" resultMap="CategoryResultMap">
+		SELECT * FROM d_goodcategory WHERE d_cateid=#{cateid}
+	</select>
+-->
+
+	<!-- 根据id查询类别 -->
+	<select id="queryFirstCategroyAndSecondCategroy" resultMap="CategoryResultMap">
+		SELECT * FROM D_GOODCATEGORY
+		<where>
+			<if test="d_cateid != null">
+				d_cateid=#{d_cateid}
+			</if>
+			<if test="_parameter != null">
+				or d_cateid=#{parentid}
+			</if>
+		</where>
+	</select>
+
+</mapper>

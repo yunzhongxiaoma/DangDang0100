@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+	<!-- ******************** 用户登录注册查看商品 ******************** -->
+    <package name="user"  extends="struts-default"  namespace="/user">
+		<!-- 登陆的action -->
+		<action name="login"  class="com.dangdang.action.UserMgMAction" method="login">
+			<result name="loginsuccess">/main/main.jsp</result>
+			<result name="address">/order/address_form.jsp</result>
+			<result name="loginerror">/user/login_form.jsp</result>
+		</action>
+		<!-- 登出的action -->
+		<action name="logout"  class="com.dangdang.action.UserMgMAction" method="LogoutAction">
+			<result name="logout">/main/main.jsp</result>
+		</action>
+		<!-- 注册的action -->
+		<action name="reg" class="com.dangdang.action.UserMgMAction" method="reg">
+			<result name="registerSuccess">/user/register_form.jsp</result>
+			<result name="verifyForm">/user/verify_form.jsp</result>
+		</action>
+		<!-- 验证邮箱的action -->
+		<action name="validateEmailCode" class="com.dangdang.action.UserMgMAction" method="validateEmailCode">
+			<result name="regSuccess">/user/login_form.jsp</result>
+			<result name="again">/user/verify_form.jsp</result>
+			<result name="address">/order/address_form.jsp</result>
+		</action>
+    	<!-- 通过id查询商品 -->
+    	<action name="toGoodsDetails" class="com.dangdang.action.GoodsAction" method="toGoodsDetails">
+			<result name="productDetail">/main/product.jsp</result>
+    	</action>
+			   	<!-- 查找所有商品 -->
+			   	<!-- 
+			   	<action name="selectAll" class="com.dangdang.action.GoodsAction" method="selectAll">
+					<result name="showAll">/showAll.jsp</result>
+				</action>
+				 -->
+    </package>
+    
+    <!-- ********************主页展示 ******************** -->
+    <package name="main" extends="struts-default"  namespace="/main">
+    	<!-- && 主页展示  && -->
+    	<!-- 分类浏览 -->
+		<action name="showFirstCategroy" class="com.dangdang.action.CategoryAction" method="showFirstCategroy">
+			<result name="main">/main/category.jsp</result>
+		</action>
+    	<!-- 编辑推荐 -->
+		<action name="editorAdvisor" class="com.dangdang.action.GoodsAction" method="editorAdvisor">
+			<result name="main">/main/recommend.jsp</result>
+		</action>
+    	<!-- 热销图书 -->
+		<action name="hotProduct" class="com.dangdang.action.GoodsAction" method="hotProduct">
+			<result name="main">/main/hot.jsp</result>
+		</action>
+    	<!-- 新书热卖 -->
+		<action name="newHotProduct" class="com.dangdang.action.GoodsAction" method="newHotProduct">
+			<result name="main">/main/hotBoard.jsp</result>
+		</action>
+    	<!-- 最新上架 -->
+		<action name="newProduct" class="com.dangdang.action.GoodsAction" method="newProduct">
+			<result name="main">/main/new.jsp</result>
+		</action>
+		<!-- && 一级类别浏览  && -->
+		<!-- 展示类别数据 -->
+		<action name="subCategroyView" class="com.dangdang.action.CategoryAction" method="subCategroyView">
+			<result name="book_list" type="chain">subCategoryGoodsShow</result>
+		</action>
+		<!-- 展示商品数据 -->
+		<action name="subCategoryGoodsShow" class="com.dangdang.action.GoodsAction" method="subCategoryGoodsShow">
+			<result name="book_list">/main/book_list.jsp</result>
+		</action>
+		<!-- 用户路径 -->
+		<action name="userDirectoryPath" class="com.dangdang.action.CategoryAction" method="userDirectoryPath">
+			<result name="book_list">/main/userDirectoryPath.jsp</result>
+		</action>
+    </package>
+    
+    <!-- ******************** 购物车 ******************** -->
+    <package name="cart" extends="struts-default"  namespace="/cart">
+		<!-- 加入购物车 -->
+		<action name="addCart" class="com.dangdang.action.CartAction" method="addCart">
+			<result name="cartlist">/cart/cart_list.jsp</result>
+		</action>
+		<!-- 修改购物车商品数量 -->
+		<action name="modifyCart" class="com.dangdang.action.CartAction" method="modifyCart">
+			<result name="cartlist">/cart/cart_list.jsp</result>
+		</action>
+		<!-- 删除购物车项 -->
+		<action name="deleteCart" class="com.dangdang.action.CartAction" method="deleteCart">
+			<result name="cartlist">/cart/cart_list.jsp</result>
+		</action>
+		<!-- 恢复购物车项  -->
+		<action name="recoverCart" class="com.dangdang.action.CartAction" method="recoverCart">
+			<result name="cartlist">/cart/cart_list.jsp</result>
+		</action>
+    </package>
+
+
+    <!-- ******************** 订单 ******************** -->
+    <package name="order" extends="struts-default"  namespace="/order">
+		<!-- 修改默认拦截器，将自定义的拦截器栈定义为struts2的默认拦截器。 -->
+		<!-- 定义拦截器和拦截器栈 -->
+		<interceptors>
+	    	<interceptor name="checklogin" class="com.dangdang.interceptor.UserInterceptor"></interceptor>
+	    	
+			<interceptor-stack name="checkloginStack">
+			   <interceptor-ref name="defaultStack"></interceptor-ref>
+			   <interceptor-ref name="checklogin"></interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+		
+		<!-- 此默认interceptor是针对所有action的 --> 
+        <!-- 如果某个action中引入了interceptor, 则在这个action中此默认interceptor就会失效 --> 
+		<default-interceptor-ref name="checkloginStack"></default-interceptor-ref>
+		
+		<global-results>
+			<result name="login">/user/login_form.jsp</result>
+		</global-results>
+		
+    	<!-- 确认购物车订单  -->
+		<action name="confirmOrder" class="com.dangdang.action.OrderAction" method="confirmOrder">
+			<result name="address">/order/address_form.jsp</result>
+		</action>
+		
+    	<!-- 创建订单  -->
+		<action name="createOrder" class="com.dangdang.action.OrderAction" method="createOrder">
+			<result name="orderOk">/order/order_ok.jsp</result>
+		</action>
+    </package>
+    
+	<!-- ******** 默认actiond的namespace="/main" ******** -->
+    <package name="default"  extends="struts-default"  namespace="/main">
+    	<default-action-ref name="index"></default-action-ref>
+    	<action name="index">
+    		<result>/main/main.jsp</result>
+    	</action>
+    </package> 
+
+</struts>

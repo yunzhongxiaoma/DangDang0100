@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "../mybatis-3-mapper.dtd" >
+<mapper namespace="com.dangdang.dao.AddressDAO">
+	<!-- 查询所有类别（首页展示） -->
+	<insert id="save">
+		<!-- 序列控制主键唯一 -->
+		<selectKey keyProperty="addrId" resultType="int" order="BEFORE">
+			select S_d_buyaddress.nextval from dual
+		</selectKey>
+		insert into d_buyaddress(d_addrid,d_username,d_posthome,d_postcode,d_telephone,d_mobilephone,d_default,d_addrstatus,d_uid) 
+		values(#{addrId},#{username},#{posthome},#{postcode},#{telephone},#{mobilephone},#{isDefault},#{addrstatus},#{uId})
+	</insert>
+	
+<!-- 
+	<resultMap type="Category" id="CategoryResultMap">
+		<id property="id" column="D_CATEID" />
+		<result property="name" column="D_CNAME" />
+		<result property="parentid" column="D_PARENTID" />
+		<result property="amount" column="D_GOODSQUANTITY" />
+	</resultMap> 
+-->
+<!-- 
+	<select id="queryAllFirstCategory" resultMap="CategoryResultMap">
+		<![CDATA[  SELECT * FROM d_goodcategory WHERE d_cateid<=7  ]]>
+	</select>
+ -->
+ 
+</mapper>
