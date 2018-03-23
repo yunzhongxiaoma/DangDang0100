@@ -18,8 +18,11 @@
 		</action>
 		<!-- 注册的action -->
 		<action name="reg" class="com.dangdang.action.UserMgMAction" method="reg">
-			<result name="registerSuccess">/user/register_form.jsp</result>
-			<result name="verifyForm">/user/verify_form.jsp</result>
+			<result name="again">/user/register_form.jsp</result>
+			<result name="validateEmail">/user/verify_form.jsp</result>
+		</action>
+		<!-- 判断用户注册邮箱是否重复 -->
+		<action name="checkEmail" class="com.dangdang.action.UserMgMAction" method="checkEmail">
 		</action>
 		<!-- 验证邮箱的action -->
 		<action name="validateEmailCode" class="com.dangdang.action.UserMgMAction" method="validateEmailCode">

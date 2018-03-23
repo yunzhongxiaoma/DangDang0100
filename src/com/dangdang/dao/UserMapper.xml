@@ -21,4 +21,8 @@
 	<update id="update">
 		update d_user set D_ACCOUNTSTATE=#{accountstate} where D_UID=#{id}
 	</update>
+	<!-- 查询某邮箱多少个0代表某false,1代表true -->
+	<select id="queryEmail" resultType="boolean">
+	   select count(*) from d_user where d_email = #{email}
+	</select>
 </mapper>

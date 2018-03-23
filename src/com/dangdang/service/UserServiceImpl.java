@@ -57,9 +57,14 @@ public class UserServiceImpl implements UserService{
 			e.printStackTrace();
 		}
 		return null;
-	}
+    }
 
-	
-
+    // 检查用户注册邮箱是否重复
+    @Override
+    public boolean checkEmail(String email) {
+        // TODO Auto-generated method stub
+        UserDAO ud = (UserDAO) MyBatisUtil.getMapper(UserDAO.class);
+        return ud.queryEmail(email);
+    }
 	
 }

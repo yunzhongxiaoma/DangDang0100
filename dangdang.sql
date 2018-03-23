@@ -41,6 +41,7 @@ alter table d_goods
    drop constraint FK_D_GOODS_REFERENCE_D_GOODCA
 /
 
+/*危险操作--删表*/
 drop table d_buyaddress cascade constraints
 /
 
@@ -58,6 +59,8 @@ drop table d_goods cascade constraints
 
 drop table d_user cascade constraints
 /
+
+
 
 drop sequence S_d_buyaddress
 /
@@ -101,7 +104,7 @@ create sequence S_d_user
 create table d_buyaddress  (
    d_addrid             NUMBER(6)                       not null,
    d_username           VARCHAR2(16),
-   d_posthome           VARCHAR2(16),
+   d_posthome           VARCHAR2(100),
    d_postcode           VARCHAR2(16),
    d_telephone          VARCHAR2(16),
    d_mobilephone        VARCHAR2(16),
@@ -118,8 +121,8 @@ create table d_buyaddress  (
 create table d_buyorder  (
    d_orderid            NUMBER(6)                       not null,
    d_onumber            VARCHAR2(80),
-   d_totalprice         INTEGER,
-   d_createtimer        DATE,
+   d_totalprice         FLOAT(126),
+   d_createtimer        DATE  DEFAULT CURRENT_TIMESTAMP,
    d_orderstatus        SMALLINT,
    d_uid                INTEGER,
    d_addrid             INTEGER,
@@ -161,7 +164,7 @@ create table d_goods  (
    d_name               VARCHAR2(16),
    d_author             VARCHAR2(16),
    d_publisher          VARCHAR2(16),
-   d_describe           VARCHAR2(16),
+   d_describe           VARCHAR2(200),
    d_originalprice      BINARY_DOUBLE,
    d_dangdangprice      BINARY_DOUBLE,
    d_publishingtime     DATE,
@@ -174,11 +177,11 @@ create table d_goods  (
    d_format             INTEGER,
    d_paper              VARCHAR2(16),
    d_packaging          VARCHAR2(16),
-   d_editorrecommende   VARCHAR2(16),
-   d_briefcontent       VARCHAR2(16),
-   d_briefauthor        VARCHAR2(16),
-   d_catalog            VARCHAR2(16),
-   d_mediareviews       VARCHAR2(16),
+   d_editorrecommende   VARCHAR2(500),
+   d_briefcontent       VARCHAR2(400),
+   d_briefauthor        VARCHAR2(600),
+   d_catalog            VARCHAR2(300),
+   d_mediareviews       VARCHAR2(300),
    d_illustration       VARCHAR2(16),
    d_sheletime          DATE,
    d_bookstate          SMALLINT,
