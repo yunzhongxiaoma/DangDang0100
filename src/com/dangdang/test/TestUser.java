@@ -25,8 +25,10 @@ public class TestUser {
 	public void testregister() {
 		try{
 			UserDAO  ud = (UserDAO)MyBatisUtil.getMapper(UserDAO.class);
+	         Date date=new Date();
+	         String createTime = new SimpleDateFormat("yyyyMMddHHmmss").format(date);
 			//调用DAO	
-			ud.save(new User("sdfe@qq.com", "王波", "111", 1));
+			ud.save(new User("sdfe@qq.com", "王波", "111", 38));
 			//控制事务
 			MyBatisUtil.commit();
 		}catch(Exception e){

@@ -167,9 +167,9 @@ create table d_goods  (
    d_describe           VARCHAR2(200),
    d_originalprice      BINARY_DOUBLE,
    d_dangdangprice      BINARY_DOUBLE,
-   d_publishingtime     DATE,
+   d_publishingtime     DATE DEFAULT CURRENT_TIMESTAMP ,
    d_revision           INTEGER,
-   d_printingtime       DATE,
+   d_printingtime       DATE DEFAULT CURRENT_TIMESTAMP,
    d_impression         INTEGER,
    d_Iisbn              VARCHAR2(16),
    d_wordsnumber        INTEGER,
@@ -183,7 +183,7 @@ create table d_goods  (
    d_catalog            VARCHAR2(300),
    d_mediareviews       VARCHAR2(300),
    d_illustration       VARCHAR2(16),
-   d_sheletime          DATE,
+   d_sheletime          DATE DEFAULT CURRENT_TIMESTAMP,
    d_bookstate          SMALLINT,
    d_stock              INTEGER,
    d_sales              INTEGER,
@@ -199,10 +199,10 @@ create table d_goods  (
 /*==============================================================*/
 create table d_user  (
    d_uid                NUMBER(6)                       not null,
-   d_email              VARCHAR2(16),
+   d_email              VARCHAR2(30),
    d_password           VARCHAR2(16),
    d_nickname           VARCHAR2(16),
-   d_createtime         DATE,
+   d_createtime         DATE DEFAULT CURRENT_TIMESTAMP,
    d_accountstate       SMALLINT,
    constraint PK_D_USER primary key (d_uid)
 )

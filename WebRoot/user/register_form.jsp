@@ -84,6 +84,9 @@
 							if (pwd1 != pwd2) {
 								document.getElementById("unsameWarn").style.display = "block";
 								return false;
+							}else {
+								document.getElementById("unsameWarn").style.display = "none";
+								return true;
 							}
 						}
 					</script>
